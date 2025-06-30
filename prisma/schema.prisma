@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id        String    @id @default(cuid())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  role      Role      @default(ADMIN)
+  posts     Post[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Session   Session[]
+
+  @@index([username, email])
+  @@map("users")
+}
+
+model Post {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String  @unique
+  thumbnail   String
+  content     String  @db.Text
+  isPublished Boolean @default(true)
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  tags       Tag[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Ga dulu
+
+  @@index([title, content, isPublished])
+  @@map("posts")
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+
+  @@index([slug])
+  @@map("categories")
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+
+  @@index([slug])
+  @@map("tags")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String   
+  user         User     @relation(fields: [userId], references: [id])
+  refreshToken String   @unique
+  userAgent    String
+  ipAddress    String
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+
+  @@map("sessions")
+}
