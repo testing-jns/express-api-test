@@ -43,11 +43,11 @@ const EnvSchema = z
 // export type env = z.infer<typeof EnvSchema>;
 
 // eslint-disable-next-line node/no-process-env
-const { data: env, error } = EnvSchema.safeParse(process.env);
+const { data: env, error } = EnvSchema.safeParse(process.env)
 
 if (error) {
   console.error('❌ Invalid ENV:');
-  console.error(JSON.stringify(error.flatten().fieldErrors, null, 2));
+  console.error(JSON.stringify(error.flatten().fieldErrors, null, 2))
   process.exit(1);
 }
 
