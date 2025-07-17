@@ -13,7 +13,10 @@ export const listPosts = async (req: Request, res: Response): Promise<void> => {
   res.json({ success: true, data: posts });
 };
 
-export const getPostBySlug = async (req: Request, res: Response): Promise<void> => {
+export const getPostBySlug = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { slug } = req.params;
 
   const post = await postService.getPostBySlug(slug);
@@ -25,14 +28,22 @@ export const getPostBySlug = async (req: Request, res: Response): Promise<void> 
   res.json({ success: true, data: post });
 };
 
-export const createPost = async (req: Request, res: Response): Promise<void> => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const body = createPostSchema.parse(req.body);
   const userId = req.user!.id;
 
-  const isPostExists = await postService.getPostByTitleOrSlug(body.title, body.slug);
+  const isPostExists = await postService.getPostByTitleOrSlug(
+    body.title,
+    body.slug,
+  );
 
   if (isPostExists) {
-    throw new EntityAlreadyExistsError('A post with the same title or slug already exists');
+    throw new EntityAlreadyExistsError(
+      'A post with the same title or slug already exists',
+    );
   }
 
   const post = await postService.createPost({ ...body, userId });
@@ -40,7 +51,10 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
   res.json({ success: true, data: post });
 };
 
-export const updatePost = async (req: Request, res: Response): Promise<void> => {
+export const updatePost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const body = updatePostSchema.parse(req.body);
   const { slug } = req.params;
   const { id: userId, role } = req.user!;
@@ -60,7 +74,10 @@ export const updatePost = async (req: Request, res: Response): Promise<void> => 
   res.json({ success: true, data: result });
 };
 
-export const deletePost = async (req: Request, res: Response): Promise<void> => {
+export const deletePost = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { slug } = req.params;
   const { id: userId, role } = req.user!;
 

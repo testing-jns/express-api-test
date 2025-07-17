@@ -3,7 +3,10 @@ import type { Request, Response } from 'express';
 import EntityNotFoundError from '@/errors/EntityNotFoundError';
 
 import * as categoryService from './categories.service';
-import { createCategorySchema, updateCategorySchema } from './categories.validation';
+import {
+  createCategorySchema,
+  updateCategorySchema,
+} from './categories.validation';
 
 export const listCategories = async (req: Request, res: Response) => {
   const categories = await categoryService.getAllCategories();

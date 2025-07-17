@@ -7,7 +7,11 @@ import UnauthorizedError from '@/errors/UnauthorizedError';
 import { buildSessionPayload } from '@/utils/helper';
 
 import * as authService from './auth.service';
-import { loginUserSchema, refreshTokenSchema, signupUserSchema } from './auth.validation';
+import {
+  loginUserSchema,
+  refreshTokenSchema,
+  signupUserSchema,
+} from './auth.validation';
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const { email } = signupUserSchema.parse(req.body);
@@ -41,7 +45,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     throw new InvalidCredentialError('Invalid credentials');
   }
 
-  const isPasswordCorrect = await authService.comparePassword(password, user.password);
+  const isPasswordCorrect = await authService.comparePassword(
+    password,
+    user.password,
+  );
 
   if (!isPasswordCorrect) {
     throw new InvalidCredentialError('Invalid credentials');
@@ -69,7 +76,10 @@ export const refresh = async (req: Request, res: Response): Promise<void> => {
     throw new UnauthorizedError('Invalid or expired refresh token');
   }
 
-  const accessToken = await authService.generateAccessToken(session!.user.id, session!.user.role);
+  const accessToken = await authService.generateAccessToken(
+    session!.user.id,
+    session!.user.role,
+  );
 
   res.json({ success: true, accessToken });
 };

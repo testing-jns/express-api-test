@@ -42,8 +42,7 @@ export const requireUser = async (
     const user: User | null = await authService.getUserById(payload.userId);
 
     req.user = user;
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof TokenExpiredError) {
       return next(
         new UnauthorizedError(

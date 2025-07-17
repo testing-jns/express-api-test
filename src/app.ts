@@ -24,7 +24,29 @@ export function createApp(): Express {
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use(morgan('dev'))
-    .use(pinoHttp({ logger: httpLogger, genReqId }))
+    // eslint-disable-next-line unused-imports/no-unused-vars
+    .use(
+      pinoHttp({
+        logger: httpLogger,
+        genReqId,
+        customLogLevel: (req: Request, res: Response,) => {
+          // Log as info for 2xx status codes (successful responses)
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            return 'info';
+          }
+          // Log as warn for 4xx status codes (client errors)
+          if (res.statusCode >= 400 && res.statusCode < 500) {
+            return 'warn';
+          }
+          // Log as error for 5xx status codes (server errors)
+          if (res.statusCode >= 500) {
+            return 'error';
+            // return 'fatal';
+          }
+          return 'silent'; // Default to info if something else
+        },
+      }),
+    )
     .use(
       helmet.hsts(),
       helmet.noSniff(),

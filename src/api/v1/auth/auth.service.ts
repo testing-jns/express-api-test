@@ -25,8 +25,7 @@ export const signupUser = async (
 
   try {
     return await authRepository.create(user, { omit: { password: true } });
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw new PrismaError('Error creating user');
     }
@@ -40,7 +39,10 @@ export const comparePassword = async (
   return await bcrypt.compare(reqPassword, userPassword);
 };
 
-export const generateAccessToken = async (id: string, role: string): Promise<string> => {
+export const generateAccessToken = async (
+  id: string,
+  role: string,
+): Promise<string> => {
   return jwt.sign({ userId: id, role }, env.JWT_PRIVATE_KEY, {
     expiresIn: '1h',
     algorithm: 'ES256',
@@ -72,7 +74,9 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
   return await authRepository.findByEmail(email);
 };
 
-export const getSessionWithUser = async (refreshToken: string): Promise<Session & { user: User } | null> => {
+export const getSessionWithUser = async (
+  refreshToken: string,
+): Promise<(Session & { user: User }) | null> => {
   return await authRepository.findSessionWithUser(refreshToken);
 };
 
@@ -87,24 +91,29 @@ export const getSessionWithUser = async (refreshToken: string): Promise<Session 
 //   return await authRepository.findSession(refreshToken, options);
 // };
 
-export const createSession = async (session: CreateSession): Promise<Session | null | void> => {
+export const createSession = async (
+  session: CreateSession,
+): Promise<Session | null | void> => {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 30);
 
   try {
     return await authRepository.createSession({ ...session, expiresAt });
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw new PrismaError('Error creating user');
     }
   }
 };
 
-export const getSession = async (refreshToken: string): Promise<Session | null> => {
+export const getSession = async (
+  refreshToken: string,
+): Promise<Session | null> => {
   return await authRepository.findSession(refreshToken);
 };
 
-export const deleteSession = async (refreshToken: string): Promise<Session | null> => {
+export const deleteSession = async (
+  refreshToken: string,
+): Promise<Session | null> => {
   return await authRepository.deleteSession(refreshToken);
 };

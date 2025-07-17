@@ -33,35 +33,42 @@ export const getPostBySlug = async (slug: string): Promise<Post | null> => {
   return await postRepository.findBySlug(slug);
 };
 
-export const getPostByTitleOrSlug = async (title: string, slug: string): Promise<Post | null> => {
+export const getPostByTitleOrSlug = async (
+  title: string,
+  slug: string,
+): Promise<Post | null> => {
   return await postRepository.findByTitleOrSlug(title, slug);
 };
 
-export const createPost = async (post: CreatePostInput): Promise<Post | null | void> => {
+export const createPost = async (
+  post: CreatePostInput,
+): Promise<Post | null | void> => {
   try {
     const { tags, ...data } = post;
     return await postRepository.create({
       ...data,
       tags: { connect: tags.map((tagId: string) => ({ id: tagId })) },
     });
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw new PrismaError('Error creating post');
     }
   }
 };
 
-export const updatePost = async (post: UpdatePostInput): Promise<Post | null | void> => {
+export const updatePost = async (
+  post: UpdatePostInput,
+): Promise<Post | null | void> => {
   try {
     const { slug, tags, ...data } = post;
 
     return await postRepository.update(slug, {
       ...data,
-      ...(tags ? { tags: { connect: tags.map((tagId: string) => ({ id: tagId })) } } : {}),
+      ...(tags
+        ? { tags: { connect: tags.map((tagId: string) => ({ id: tagId })) } }
+        : {}),
     });
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       throw new PrismaError('Error creating post');
     }

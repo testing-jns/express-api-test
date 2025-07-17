@@ -34,12 +34,19 @@ export const findByEmail = async (email: string): Promise<User | null> => {
   return await db.user.findUnique({ where: { email } });
 };
 
-export const findSession = async (refreshToken: string): Promise<Session | null> => {
+export const findSession = async (
+  refreshToken: string,
+): Promise<Session | null> => {
   return await db.session.findUnique({ where: { refreshToken } });
 };
 
-export const findSessionWithUser = async (refreshToken: string): Promise<Session & { user: User } | null> => {
-  return await db.session.findUnique({ where: { refreshToken }, include: { user: true } });
+export const findSessionWithUser = async (
+  refreshToken: string,
+): Promise<(Session & { user: User }) | null> => {
+  return await db.session.findUnique({
+    where: { refreshToken },
+    include: { user: true },
+  });
 };
 
 // export const findSession = async <T extends Prisma.SessionFindUniqueArgs>(
@@ -52,10 +59,14 @@ export const findSessionWithUser = async (refreshToken: string): Promise<Session
 //   });
 // };
 
-export const createSession = async (session: Prisma.SessionUncheckedCreateInput): Promise<Session | null> => {
+export const createSession = async (
+  session: Prisma.SessionUncheckedCreateInput,
+): Promise<Session | null> => {
   return await db.session.create({ data: session });
 };
 
-export const deleteSession = async (refreshToken: string): Promise<Session | null> => {
+export const deleteSession = async (
+  refreshToken: string,
+): Promise<Session | null> => {
   return db.session.delete({ where: { refreshToken } });
 };

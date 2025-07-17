@@ -25,7 +25,7 @@ export const signupUserSchema: z.ZodObject<any> = z.object({
     .string()
     .min(3, { message: '"username" must be at least 3 characters long' })
     .nonempty({ message: '"username" can\'t be empty' })
-    .refine(val => val === val.toLowerCase(), {
+    .refine((val) => val === val.toLowerCase(), {
       message: '"username" must be lowercase',
     }),
   email: baseEmailValidation,
@@ -38,7 +38,9 @@ export const loginUserSchema: z.ZodObject<any> = z.object({
 });
 
 export const refreshTokenSchema: z.ZodObject<any> = z.object({
-  refreshToken: z.string().nonempty({ message: '"refreshToken" can\'t be empty' }),
+  refreshToken: z
+    .string()
+    .nonempty({ message: '"refreshToken" can\'t be empty' }),
 });
 
 export type User = z.infer<typeof signupUserSchema>;

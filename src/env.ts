@@ -15,15 +15,15 @@ const EnvSchema = z
     APP_NAME: z.string().default('Node.js API'),
     APP_PORT: z.coerce.number().default(3000),
     BASE_URL: z.string(),
-    LOG_LEVEL: z.enum([
-      'fatal',
-      'error',
-      'warn',
-      'info',
-      'debug',
-      'trace',
-      'silent',
-    ]), // pino
+    // LOG_LEVEL: z.enum([
+    //   'fatal',
+    //   'error',
+    //   'warn',
+    //   'info',
+    //   'debug',
+    //   'trace',
+    //   'silent',
+    // ]), // pino
     DATABASE_URL: z.string().url(),
     JWT_PRIVATE_KEY_PATH: z.string(),
     JWT_PUBLIC_KEY_PATH: z.string(),

@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky",
-    "db:generate": "prisma db generate",
+    "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed"
   },

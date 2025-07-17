@@ -15,6 +15,7 @@
 *.bak
 # Environment files (containing secrets, API keys, credentials)
 .env
+.env.bak
 *.env
 .env.*
 

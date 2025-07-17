@@ -10,7 +10,7 @@ export const requireAdmin = (
   if (req.user?.role !== 'ADMIN') {
     return next(
       new ForbiddenError(
-        'Forbidden: You don\'t have permission to access this resource.',
+        "Forbidden: You don't have permission to access this resource.",
       ),
     );
   }

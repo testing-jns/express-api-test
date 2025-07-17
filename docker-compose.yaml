@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  # Node.js Web Service
+  web:
+    image: node:22.16.0-alpine
+    container_name: testing_web
+    environment:
+      - APP_NAME="JNS23 API"
+      - APP_PORT=4000
+      - BASE_URL="http://localhost:4000"
+      - LOG_LEVEL=info
+      - NODE_ENV="production"
+      - DATABASE_URL="postgresql://admin:Admin123@db:5555/jns23api?schema=public"  # Adjusted to use the "db" service as hostname
+      - JWT_PRIVATE_KEY_PATH="./src/keys/jwt-es256-private.key"
+      - JWT_PUBLIC_KEY_PATH="./src/keys/jwt-es256-public.pem"
+    ports:
+      - "7777:4000"  # Expose your API on port 4000
+    depends_on:
+      - db  # Make sure the database is up before the web service starts
+    volumes:
+      - .:/app  # Mount your local `src` folder for code changes (optional)
+    command: ["sh", "-c", "cd /app && rm -rf node_modules && npm cache clean --force && npm install && npx prisma generate && npx prisma migrate && npx prisma db push && npx prisma db seed && npm run build && npm start"]  # Ensure the app runs after installation
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: testing_db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Admin123
+      - POSTGRES_DB=jns23api
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Persist the data between container restarts
+    ports:
+      - "5555:5432"  # Expose PostgreSQL on default port 5432
+
+# Volumes to persist database data
+volumes:
+  db_data:

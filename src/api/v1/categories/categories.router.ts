@@ -2,7 +2,13 @@ import { Router } from 'express';
 
 import { requireAdmin } from '@/middlewares/requireAdmin';
 
-import { createCategory, deleteCategory, getCategoryBySlug, listCategories, updateCategory } from './categories.controller';
+import {
+  createCategory,
+  deleteCategory,
+  getCategoryBySlug,
+  listCategories,
+  updateCategory,
+} from './categories.controller';
 
 export const CategoryRouter: Router = Router();
 

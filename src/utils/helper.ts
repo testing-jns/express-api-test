@@ -18,8 +18,7 @@ export function getRandomElements(arr: any[], pick = 1): any[] {
   const selectedElements: any[] = [];
 
   for (let index = 0; index < pick; index++) {
-    if (arr.length === 0)
-      break;
+    if (arr.length === 0) break;
 
     const randomIndex = Math.floor(Math.random() * arr.length);
     selectedElements.push(arr[randomIndex]);
@@ -34,8 +33,8 @@ export function formatZodErrors(err: ZodError): ZodFormattedErrors {
   return err.errors.reduce((acc: ZodFormattedErrors, issue: ZodIssue) => {
     const path: string = issue.path[0]?.toString() || '_global_';
 
-    const message
-      = path === '_global_'
+    const message =
+      path === '_global_'
         ? 'Request body is empty or malformed'
         : issue.message;
 
@@ -70,8 +69,7 @@ export function readKeys(privateKeyPath: string, publicKeyPath: string) {
     const privateKey = fs.readFileSync(path.resolve(privateKeyPath), 'utf-8');
     const publicKey = fs.readFileSync(path.resolve(publicKeyPath), 'utf-8');
     return { privateKey, publicKey };
-  }
-  catch (err) {
+  } catch (err) {
     console.error('❌ Gagal membaca private key & public key file:', err);
     process.exit(1);
   }
@@ -84,7 +82,11 @@ type CreateSession = {
   ipAddress: string;
 };
 
-export const buildSessionPayload = (req: Request, userId: string, refreshToken: string): CreateSession => ({
+export const buildSessionPayload = (
+  req: Request,
+  userId: string,
+  refreshToken: string,
+): CreateSession => ({
   userId,
   refreshToken,
   userAgent: req.headers['user-agent'] || 'unknown',

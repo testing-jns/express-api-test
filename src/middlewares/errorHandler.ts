@@ -4,7 +4,7 @@ import { ZodError } from 'zod';
 
 import CustomError from '@/errors/CustomError';
 import { formatZodErrors, getErrorMessage } from '@/utils/helper';
-import { logger } from '@/utils/logger';
+// import { logger } from '@/utils/logger';
 
 export const errorHandler = (
   err: any,
@@ -44,7 +44,7 @@ export const errorHandler = (
     });
   }
 
-  logger.error(err);
+  // logger.error(err);
 
   res.status(500).json({
     success: false,
